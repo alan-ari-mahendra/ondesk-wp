@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ondesk style guide and tokens</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#171614}a:hover{color:#1B5FD1}
+.sg{font-family:"Instrument Sans",system-ui,sans-serif;color:#171614;background:#F3EFE7;line-height:1.5}
+.sg *{box-sizing:border-box}
+.sg h2{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:#7A766E;font-weight:500;margin:0 0 20px;padding-bottom:12px;border-bottom:1px solid rgba(23,22,20,.14)}
+.sw{display:flex;flex-direction:column;gap:8px}
+.sw i{display:block;height:68px;border-radius:6px;border:1px solid rgba(23,22,20,.14)}
+.sw b{font-weight:600;font-size:13px}
+.sw small{font-size:12px;color:#4A4741;font-family:"IBM Plex Mono",monospace}
+.row{display:grid;grid-template-columns:200px 1fr 240px;gap:24px;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(23,22,20,.07)}
+.row small{font-size:12px;color:#4A4741;font-family:"IBM Plex Mono",monospace}
+.hd{font-weight:600;letter-spacing:-0.04em;line-height:1;margin:0}
+.mark{display:inline-block;padding:0 .12em;background:#F39A1E;border-radius:3px;transform:rotate(-1.2deg)}
+.mono{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;font-weight:500;color:#7A766E}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;border:1.5px solid #171614;font-weight:600;font-size:15.5px;text-decoration:none;font-family:inherit}
+.lbl{font-size:12px;color:#4A4741;font-family:"IBM Plex Mono",monospace;margin-top:10px;display:block}
+</style>
+</helmet>
+
+<div class="sg" style="width:1200px;height:1860px;padding:56px 64px;display:flex;flex-direction:column;gap:44px">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px">
+    <div>
+      <p class="hd" style="font-size:44px">Ondesk</p>
+      <p style="margin:8px 0 0;color:#4A4741;font-size:15px">Editorial index style. Design tokens and components for the Elementor build. Register these as Global Colors and Global Fonts.</p>
+    </div>
+    <p style="margin:0;font-size:12px;color:#4A4741;font-family:'IBM Plex Mono',monospace">Container 1280px · Gutter 16 to 48px · Breakpoints 1100 / 860 / 600</p>
+  </div>
+
+  <section>
+    <h2>Colors</h2>
+    <div style="display:grid;grid-template-columns:repeat(8, minmax(0, 1fr));gap:16px">
+      <div class="sw"><i style="background:#F3EFE7"></i><b>Cream (page bg)</b><small>#F3EFE7</small></div>
+      <div class="sw"><i style="background:#FBF9F4"></i><b>Cream 2 (cards)</b><small>#FBF9F4</small></div>
+      <div class="sw"><i style="background:#171614"></i><b>Ink</b><small>#171614</small></div>
+      <div class="sw"><i style="background:#4A4741"></i><b>Ink 2 (body)</b><small>#4A4741</small></div>
+      <div class="sw"><i style="background:#7A766E"></i><b>Ink 3 (labels)</b><small>#7A766E</small></div>
+      <div class="sw"><i style="background:#121211"></i><b>Black (dark blocks)</b><small>#121211</small></div>
+      <div class="sw"><i style="background:#1C1B19"></i><b>Black 2</b><small>#1C1B19</small></div>
+      <div class="sw"><i style="background:rgba(23,22,20,.14)"></i><b>Line</b><small>ink 14%</small></div>
+      <div class="sw"><i style="background:#2F8BFF"></i><b>Blue (connectors)</b><small>#2F8BFF</small></div>
+      <div class="sw"><i style="background:#1B5FD1"></i><b>Blue deep</b><small>#1B5FD1</small></div>
+      <div class="sw"><i style="background:#45C2F2"></i><b>Sky (CTA band)</b><small>#45C2F2</small></div>
+      <div class="sw"><i style="background:#F39A1E"></i><b>Orange (marks)</b><small>#F39A1E</small></div>
+      <div class="sw"><i style="background:#E26D1F"></i><b>Orange deep</b><small>#E26D1F</small></div>
+      <div class="sw"><i style="background:#6B3F1D"></i><b>Brown (Gyms tab)</b><small>#6B3F1D</small></div>
+      <div class="sw"><i style="background:#1E6A3A"></i><b>Green (Salons tab)</b><small>#1E6A3A</small></div>
+      <div class="sw"><i style="background:#25B06A"></i><b>Green bright (status)</b><small>#25B06A</small></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Typography</h2>
+    <div class="row"><small>H1 / Instrument Sans 600</small><p class="hd" style="font-size:72px;letter-spacing:-0.045em;line-height:0.96">Never miss another <span class="mark">booking</span>.</p><small>104px desktop · 42 to 60px mobile · lh 0.96 · tracking -0.045em</small></div>
+    <div class="row"><small>Slash heading / 600</small><p class="hd" style="font-size:64px;letter-spacing:-0.045em"><span style="color:#2F8BFF;font-weight:500">/</span>pricing</p><small>76px desktop · slash in Blue</small></div>
+    <div class="row"><small>H2 / Instrument Sans 600</small><p class="hd" style="font-size:44px">One inbox for every conversation.</p><small>54px desktop · 32px mobile</small></div>
+    <div class="row"><small>Section label / Plex Mono 500</small><p class="mono" style="margin:0">012 / Pricing</p><small>11.5px · tracking 0.08em · uppercase</small></div>
+    <div class="row"><small>Nav index / Plex Mono 500</small><p class="mono" style="margin:0;color:#171614">01 Product &nbsp;&nbsp; 02 Use cases &nbsp;&nbsp; 03 Pricing &nbsp;&nbsp; 04 FAQ</p><small>numbered links</small></div>
+    <div class="row"><small>Body / Instrument Sans 400</small><p style="margin:0;font-size:17px;color:#4A4741">Ondesk answers every chat, WhatsApp and DM in seconds, books straight into your calendar and follows up while you work.</p><small>17px desktop · 16px mobile · lh 1.55</small></div>
+    <div class="row"><small>Inline highlight / 500</small><p style="margin:0;font-size:16px;color:#4A4741">Your daily summary comes with <span style="padding:1px 5px;border-radius:3px;background:#45C2F2;color:#171614;font-weight:500">every booking</span> and <span style="padding:1px 5px;border-radius:3px;background:#F39A1E;color:#171614;font-weight:500">every lead</span>.</p><small>Sky or Orange tint · radius 3px</small></div>
+  </section>
+
+  <section style="display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:48px">
+    <div>
+      <h2>Buttons</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+        <a href="#x" class="btn" style="background:#171614;color:#fff">Start free trial →</a>
+        <a href="#x" class="btn" style="background:transparent;color:#171614">Watch 2 min demo</a>
+        <a href="#x" class="btn" style="background:#2F8BFF;border-color:#2F8BFF;color:#fff">Book my demo</a>
+      </div>
+      <span class="lbl">pill 999px · min height 48 · 600 15.5px · border 1.5px Ink</span>
+    </div>
+    <div>
+      <h2>Status, pills &amp; billing toggle</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+        <span class="mono" style="color:#1E6A3A;font-weight:600;display:inline-flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#25B06A"></span>All systems answering</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;font-weight:600;padding:3px 7px;border-radius:999px;background:#D9F0E2;color:#1E6A3A">Booked</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;font-weight:600;padding:3px 7px;border-radius:999px;background:#FDE7C8;color:#6B3F1D">New lead</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;font-weight:600;padding:3px 7px;border-radius:999px;background:#171614;color:#fff">Needs you</span>
+        <span style="display:inline-flex;border:1.5px solid #171614;border-radius:999px;overflow:hidden"><span style="padding:10px 18px;background:#171614;color:#fff;font-weight:600;font-size:14px">Monthly</span><span style="padding:10px 18px;font-weight:600;font-size:14px">Yearly · Save 17%</span></span>
+      </div>
+      <span class="lbl">status pill colors follow the dashboard · toggle switches all three prices</span>
+    </div>
+  </section>
+
+  <section style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:24px">
+    <div>
+      <h2>Chat bubbles</h2>
+      <div style="background:#FBF9F4;border:1.5px solid #171614;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px">
+        <div style="align-self:flex-end;background:#2F8BFF;color:#fff;padding:10px 13px;border-radius:14px;border-bottom-right-radius:4px;font-size:14px;max-width:84%">Hi, do you have anything for a facial this Saturday?</div>
+        <div style="align-self:flex-start;background:#F3EFE7;padding:10px 13px;border-radius:14px;border-bottom-left-radius:4px;font-size:14px;max-width:84%">We have 10:30 AM or 2:00 PM on Saturday. Which works?</div>
+        <div style="border:1.5px solid #171614;border-radius:10px;padding:10px 12px;background:#fff;font-size:13px;display:flex;justify-content:space-between"><b>Booking confirmed</b><span>$95</span></div>
+      </div>
+      <span class="lbl">customer = Blue · Ondesk = Cream · radius 14 / 4</span>
+    </div>
+    <div>
+      <h2>Use case panel</h2>
+      <div style="background:#E26D1F;color:#fff;border-radius:12px;padding:24px">
+        <p class="mono" style="margin:0 0 10px;color:rgba(255,255,255,.8)">Clinics</p>
+        <p class="hd" style="font-size:28px;margin-bottom:12px">Fill every chair.</p>
+        <p style="margin:0;font-size:14px">Answers treatment and price questions, books consults.</p>
+        <p class="hd" style="font-size:34px;margin-top:16px">+31%</p>
+      </div>
+      <span class="lbl">Clinics Orange deep · Gyms Brown · Salons Green · Real estate Blue</span>
+    </div>
+    <div>
+      <h2>Form field</h2>
+      <div style="background:#FBF9F4;border:1px solid rgba(23,22,20,.14);border-radius:6px;padding:22px">
+        <div style="display:grid;gap:8px;margin-bottom:14px"><label for="sgn" class="mono">Work email</label><input id="sgn" placeholder="you@business.com" style="font-family:inherit;font-size:15.5px;min-height:48px;padding:0 14px;border:1.5px solid rgba(23,22,20,.14);border-radius:6px;background:#FBF9F4;color:#171614;width:100%"></div>
+        <div style="display:grid;gap:8px"><label for="sgt" class="mono">Business type</label><select id="sgt" style="font-family:inherit;font-size:15.5px;min-height:48px;padding:0 14px;border:1.5px solid rgba(23,22,20,.14);border-radius:6px;background:#FBF9F4;color:#171614;width:100%"><option>Clinic</option></select></div>
+      </div>
+      <span class="lbl">radius 6 · focus Blue + 3px ring at 25% · error #B22A13</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Grid, connectors &amp; radius</h2>
+    <div style="display:grid;grid-template-columns:repeat(4, minmax(0, 1fr));gap:20px;font-size:13px;color:#4A4741">
+      <div><b style="color:#171614;font-weight:600">Background grid</b><br>6 faint vertical columns at ink 7% across every cream section</div>
+      <div><b style="color:#171614;font-weight:600">Connector lines</b><br>Blue #2F8BFF, thick, rounded caps and corners, draw on scroll</div>
+      <div><b style="color:#171614;font-weight:600">Radius</b><br>6px cards, tables, inputs · 999px buttons and pills · 12px panels</div>
+      <div><b style="color:#171614;font-weight:600">Dark blocks</b><br>Problem stats and testimonials full bleed on Black #121211</div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":1860}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
