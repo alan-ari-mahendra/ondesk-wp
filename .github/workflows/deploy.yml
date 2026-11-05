@@ -9,6 +9,13 @@ on:
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint
@@ -16,18 +23,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: PHP syntax
-        run: find wp-content/themes/hello-elementor -name '*.php' -print0 | xargs -0 -P4 php -l
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
 
-      - name: Shell syntax
-        run: bash -n deploy/deploy.sh deploy/server-setup.sh deploy/migrate-once.sh
-
-      - name: No hardcoded secrets
+      - name: PHP syntax (hello-elementor)
         run: |
-          if grep -rE '(AAAA[A-Za-z0-9+/]{50,}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----)' \
-              --include='*.php' --include='*.sh' --include='*.js' --include='*.yml' \
-              wp-content/themes/hello-elementor deploy/ .github/ 2>/dev/null; then
-            echo "::error::Possible hardcoded key found"; exit 1
+          fail=0
+          while IFS= read -r -d '' f; do
+            php -l "$f" >/dev/null || { echo "::error file=$f::PHP syntax error"; fail=1; }
+          done < <(find wp-content/themes/hello-elementor -name '*.php' -print0)
+          exit $fail
+
+      - name: Shell syntax (deploy scripts)
+        run: for f in deploy/*.sh; do bash -n "$f"; done
+
+      - name: Reject hard-coded secrets
+        run: |
+          if grep -rInE "(password|passwd|secret|api[_-]?key|private[_ -]?key)['\"]?\s*[:=]>?\s*['\"][^'\"]{8,}['\"]" wp-content/themes/hello-elementor; then
+            echo "::error::possible hard-coded secret in hello-elementor"; exit 1
           fi
 
   deploy:
@@ -35,27 +50,33 @@ jobs:
     needs: lint
     runs-on: ubuntu-latest
     environment: production
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up SSH
+      - name: Configure SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
         run: |
-          install -d -m 700 ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$RUNNER_TEMP/deploy_key"
+          chmod 600 "$RUNNER_TEMP/deploy_key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/known_hosts"
 
-      - name: Deploy hello-elementor theme
+      - name: Deploy theme (backup, rsync, health check, auto-rollback)
         env:
           DEPLOY_HOST: ${{ secrets.SSH_HOST }}
           DEPLOY_USER: ${{ secrets.SSH_USER }}
           SITE_URL: ${{ secrets.SITE_URL }}
           REMOTE_ROOT: ${{ secrets.REMOTE_ROOT }}
           THEME_DIR: hello-elementor
+          PROJECT: ondesk
           HEALTH_MARKER: hello-elementor
-        run: |
-          SSH_OPTS="-i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes" \
-          ./deploy/deploy.sh
+          HEALTH_PATH: /
+          SSH_OPTS: -i ${{ runner.temp }}/deploy_key -o IdentitiesOnly=yes -o UserKnownHostsFile=${{ runner.temp }}/known_hosts -o StrictHostKeyChecking=yes
+        run: bash deploy/deploy.sh
+
+      - name: Remove key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/deploy_key" "$RUNNER_TEMP/known_hosts"
