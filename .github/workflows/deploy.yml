@@ -1,0 +1,60 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'wp-content/themes/hello-elementor/**'
+      - 'deploy/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP syntax
+        run: find wp-content/themes/hello-elementor -name '*.php' -print0 | xargs -0 -P4 php -l
+
+      - name: Shell syntax
+        run: bash -n deploy/deploy.sh deploy/server-setup.sh deploy/migrate-once.sh
+
+      - name: No hardcoded secrets
+        run: |
+          if grep -rE '(AAAA[A-Za-z0-9+/]{50,}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----)' \
+              wp-content/themes/hello-elementor deploy/ 2>/dev/null; then
+            echo "::error::Possible hardcoded key found"; exit 1
+          fi
+
+  deploy:
+    name: Deploy
+    needs: lint
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Deploy hello-elementor theme
+        env:
+          DEPLOY_HOST: ${{ secrets.SSH_HOST }}
+          DEPLOY_USER: ${{ secrets.SSH_USER }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+          REMOTE_ROOT: ${{ secrets.REMOTE_ROOT }}
+          THEME_DIR: hello-elementor
+          HEALTH_MARKER: hello-elementor
+        run: |
+          SSH_OPTS="-i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes" \
+          ./deploy/deploy.sh
