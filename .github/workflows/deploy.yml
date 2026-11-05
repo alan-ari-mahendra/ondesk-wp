@@ -25,7 +25,8 @@ jobs:
       - name: No hardcoded secrets
         run: |
           if grep -rE '(AAAA[A-Za-z0-9+/]{50,}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----)' \
-              wp-content/themes/hello-elementor deploy/ 2>/dev/null; then
+              --include='*.php' --include='*.sh' --include='*.js' --include='*.yml' \
+              wp-content/themes/hello-elementor deploy/ .github/ 2>/dev/null; then
             echo "::error::Possible hardcoded key found"; exit 1
           fi
 
