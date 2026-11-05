@@ -50,6 +50,9 @@ R() { ssh $SSH_OPTS -o BatchMode=yes "$DUSER@$HOST" "$@"; }
 
 [ -d "$SRC" ] || { echo "run from repo root ($SRC missing)"; exit 1; }
 
+echo "==> pre-flight: SSH connectivity"
+R "true" || { echo "::error::SSH connection failed to $DUSER@$HOST. Check SSH_PRIVATE_KEY, SSH_KNOWN_HOSTS, SSH_HOST, SSH_USER secrets."; exit 2; }
+
 echo "==> pre-flight: $REMOTE_ROOT must be a WordPress install"
 R "test -f '$REMOTE_ROOT/wp-config.php' && test -d '$REMOTE_ROOT/wp-content/plugins'" \
   || { echo "::error::$REMOTE_ROOT on the server is not a WordPress root (no wp-config.php). Check the REMOTE_ROOT secret."; exit 3; }
