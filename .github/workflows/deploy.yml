@@ -89,7 +89,7 @@ jobs:
           REMOTE_ROOT: ${{ secrets.REMOTE_ROOT }}
           THEME_DIR: hello-elementor
           PROJECT: ondesk
-          HEALTH_MARKER: hello-elementor
+          HEALTH_MARKER: ondesk-styles
           HEALTH_PATH: /
           SSH_OPTS: -i ${{ runner.temp }}/deploy_key -o IdentitiesOnly=yes -o UserKnownHostsFile=${{ runner.temp }}/known_hosts -o StrictHostKeyChecking=yes
         run: bash deploy/deploy.sh
