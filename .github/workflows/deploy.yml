@@ -64,6 +64,23 @@ jobs:
           chmod 600 "$RUNNER_TEMP/deploy_key"
           printf '%s\n' "$SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/known_hosts"
 
+      - name: Debug SSH
+        env:
+          DEPLOY_HOST: ${{ secrets.SSH_HOST }}
+          DEPLOY_USER: ${{ secrets.SSH_USER }}
+        run: |
+          echo "=== key line count ==="
+          wc -l "$RUNNER_TEMP/deploy_key"
+          head -1 "$RUNNER_TEMP/deploy_key"
+          tail -1 "$RUNNER_TEMP/deploy_key"
+          ssh -v \
+            -i "$RUNNER_TEMP/deploy_key" \
+            -o IdentitiesOnly=yes \
+            -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" \
+            -o StrictHostKeyChecking=yes \
+            -o BatchMode=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" whoami 2>&1 || true
+
       - name: Deploy theme (backup, rsync, health check, auto-rollback)
         env:
           DEPLOY_HOST: ${{ secrets.SSH_HOST }}
